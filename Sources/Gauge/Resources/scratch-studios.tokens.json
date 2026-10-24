@@ -1,0 +1,387 @@
+{
+  "name": "Scratch Studios",
+  "version": 3,
+  "color": {
+    "themes": [
+      {
+        "id": "light",
+        "name": "Paper"
+      },
+      {
+        "id": "dark",
+        "name": "Night"
+      }
+    ],
+    "tokens": [
+      {
+        "name": "ground",
+        "value": {
+          "light": "#F6F5F1",
+          "dark": "#111110"
+        },
+        "usage": "Page ground. Paper by day, Night by night."
+      },
+      {
+        "name": "raised",
+        "value": {
+          "light": "#FCFBF8",
+          "dark": "#1C1C1A"
+        },
+        "usage": "Raised layer: Card on paper, Graphite on night (sidebars). Separated from ground by a ground shift and a hairline, never a shadow."
+      },
+      {
+        "name": "track",
+        "value": {
+          "light": "#EDEAE3",
+          "dark": "#0B0B0A"
+        },
+        "usage": "Recessed track behind a segmented control or stepper, a step below the ground. The selected segment sits on raised."
+      },
+      {
+        "name": "ink",
+        "value": {
+          "light": "#161616",
+          "dark": "#ECEAE4"
+        },
+        "usage": "Primary text, headings and numerals. 16.6:1 on paper, 15.7:1 on night."
+      },
+      {
+        "name": "ink-soft",
+        "value": {
+          "light": "#4A4843",
+          "dark": "#B5B2AA"
+        },
+        "usage": "Secondary text: descriptions, units beside a numeral, inactive segments. 8.4:1 on paper, 8.9:1 on night."
+      },
+      {
+        "name": "label",
+        "value": {
+          "light": "#73706A",
+          "dark": "#8C8A84"
+        },
+        "usage": "Mono labels and metadata (Stone on paper, Ash on night). 4.5:1 and 5.5:1: small caps labels only, never body text."
+      },
+      {
+        "name": "rule",
+        "value": {
+          "light": "rgba(22, 22, 22, 0.12)",
+          "dark": "rgba(255, 255, 255, 0.10)"
+        },
+        "usage": "1px hairlines between rows, blocks and panels. Full rules divide; partial edges never highlight."
+      },
+      {
+        "name": "rule-strong",
+        "value": {
+          "light": "rgba(22, 22, 22, 0.20)",
+          "dark": "rgba(255, 255, 255, 0.20)"
+        },
+        "usage": "1px outline of a control: pills, secondary buttons, steppers, the edges of a window."
+      },
+      {
+        "name": "sand",
+        "value": {
+          "light": "#D8D3C9",
+          "dark": "#3A3935"
+        },
+        "usage": "Idle marks: empty rating dots, unfilled progress ticks."
+      },
+      {
+        "name": "nominal",
+        "value": {
+          "light": "#4C6A55",
+          "dark": "#93AE98"
+        },
+        "usage": "Kelp. Break's instrument accent: chart line, live dot, the status dot on the mark, and 'good' on Break's verdicts. Text, 1px lines and dots only. 5.5:1 on paper, 7.9:1 on night."
+      },
+      {
+        "name": "nominal-selection",
+        "value": {
+          "light": "#E8EAE5",
+          "dark": "#212420"
+        },
+        "usage": "Selected row or cell ground in Break. Never an edge highlight."
+      },
+      {
+        "name": "nominal-chart-fill",
+        "value": {
+          "light": "#D4D9D2",
+          "dark": "#2B302B"
+        },
+        "usage": "Peak of the chart fade under a nominal line. Fades to nothing at the baseline."
+      },
+      {
+        "name": "phosphor",
+        "value": {
+          "light": "#5C6B24",
+          "dark": "#B3C07A"
+        },
+        "usage": "Olive phosphor, after a P1 scope trace. Trace's instrument accent: chart line, sparklines, live dot, progress ticks, and 'good' on Trace's verdicts. 5.4:1 on paper, 9.7:1 on night."
+      },
+      {
+        "name": "phosphor-selection",
+        "value": {
+          "light": "#EAEAE1",
+          "dark": "#24261D"
+        },
+        "usage": "Selected row or nav item ground in Trace. Never an edge highlight."
+      },
+      {
+        "name": "phosphor-chart-fill",
+        "value": {
+          "light": "#D7D9C8",
+          "dark": "#313425"
+        },
+        "usage": "Peak of the chart fade under a phosphor line."
+      },
+      {
+        "name": "scratch-accent",
+        "value": {
+          "light": "#2F5872",
+          "dark": "#8EAEC4"
+        },
+        "usage": "Cyanotype. Scratch's accent: links, cursor, current state. 7.0:1 on paper, 8.1:1 on night."
+      },
+      {
+        "name": "scratch-selection",
+        "value": {
+          "light": "#E6E8E7",
+          "dark": "#202426"
+        },
+        "usage": "Selected note or row ground in Scratch. Never an edge highlight."
+      },
+      {
+        "name": "scratch-chart-fill",
+        "value": {
+          "light": "#CED6D8",
+          "dark": "#2A3034"
+        },
+        "usage": "Peak of the chart fade under a cyanotype line."
+      },
+      {
+        "name": "window",
+        "value": {
+          "light": "#E7E4DD",
+          "dark": "#24221E"
+        },
+        "usage": "Ground of a marked span: Break's best window, Trace's test interval, a found match in Scratch. Always bounded by a rule-strong hairline at each edge; labels sit outside it."
+      },
+      {
+        "name": "ochre",
+        "value": {
+          "light": "#7C5D29",
+          "dark": "#B29362"
+        },
+        "usage": "Verdict 'fair' in every instrument. 5.6:1 on paper, 6.5:1 on night."
+      },
+      {
+        "name": "clay",
+        "value": {
+          "light": "#A0583F",
+          "dark": "#C5876F"
+        },
+        "usage": "Verdict 'poor', the Stop ring, and the only signal for a destructive action (clay text, never a red panel). 4.9:1 on paper, 6.4:1 on night."
+      },
+      {
+        "name": "survey",
+        "value": {
+          "light": "#334A94",
+          "dark": "#A0B1DB"
+        },
+        "usage": "Studio accent. Studio surfaces only (site, guide), never inside an app. 7.6:1 on paper, 8.8:1 on night."
+      },
+      {
+        "name": "survey-wash",
+        "value": {
+          "light": "#DBDDE4",
+          "dark": "#2A3042"
+        },
+        "usage": "Text selection on studio surfaces only."
+      }
+    ]
+  },
+  "type": {
+    "families": {
+      "grotesk": "\"Barlow\", \"SF Pro Text\", system-ui, sans-serif",
+      "mono": "\"IBM Plex Mono\", ui-monospace, monospace",
+      "mark": "\"Cutive Mono\", \"Courier New\", monospace",
+      "personal": "\"Courier Prime\", \"Courier New\", monospace"
+    },
+    "groups": [
+      {
+        "name": "Numerals",
+        "family": "grotesk",
+        "styles": [
+          {
+            "name": "numeral-xl",
+            "fontSize": "112px",
+            "lineHeight": 1,
+            "fontWeight": 300,
+            "letterSpacing": "-0.03em",
+            "sample": "2–4",
+            "usage": "Break's hero reading. Barlow Light."
+          },
+          {
+            "name": "numeral-l",
+            "fontSize": "60px",
+            "lineHeight": 1,
+            "fontWeight": 300,
+            "sample": "12:00",
+            "usage": "Secondary reading; unit beside it at 16px in ink-soft."
+          }
+        ]
+      },
+      {
+        "name": "Mono numerals",
+        "family": "mono",
+        "styles": [
+          {
+            "name": "numeral-mono",
+            "fontSize": "56px",
+            "lineHeight": 1,
+            "fontWeight": 300,
+            "letterSpacing": "-0.02em",
+            "sample": "369.8",
+            "usage": "Trace's readings. Plex Mono 300, never Courier."
+          }
+        ]
+      },
+      {
+        "name": "Grotesk",
+        "family": "grotesk",
+        "styles": [
+          {
+            "name": "title",
+            "fontSize": "36px",
+            "lineHeight": 1.15,
+            "fontWeight": 400,
+            "sample": "Excellent",
+            "usage": "Screen titles."
+          },
+          {
+            "name": "mark",
+            "fontSize": "24px",
+            "lineHeight": 1,
+            "fontWeight": 400,
+            "letterSpacing": "0.42em",
+            "sample": "BREAK",
+            "usage": "Wordmarks only: Break, Trace, Scratch, Scratch Studios. Cutive Mono caps, tracked. Never in UI chrome.",
+            "family": "mark"
+          },
+          {
+            "name": "place",
+            "fontSize": "18px",
+            "lineHeight": 1.2,
+            "fontWeight": 500,
+            "letterSpacing": "0.14em",
+            "sample": "STEAMER LANE",
+            "usage": "Place names and pills: Barlow Medium caps."
+          },
+          {
+            "name": "heading",
+            "fontSize": "22px",
+            "lineHeight": 1.3,
+            "fontWeight": 400,
+            "sample": "Download is 21% lower than your reference."
+          },
+          {
+            "name": "body",
+            "fontSize": "15px",
+            "lineHeight": 1.55,
+            "fontWeight": 400,
+            "sample": "Changes apply immediately. There is no Save button."
+          },
+          {
+            "name": "small",
+            "fontSize": "13px",
+            "lineHeight": 1.5,
+            "fontWeight": 400,
+            "sample": "Untouched scratches move out of your way"
+          }
+        ]
+      },
+      {
+        "name": "Label mono",
+        "family": "mono",
+        "styles": [
+          {
+            "name": "label",
+            "fontSize": "11px",
+            "lineHeight": 1.4,
+            "fontWeight": 400,
+            "letterSpacing": "0.16em",
+            "sample": "LATEST THROUGHPUT",
+            "usage": "Always caps, always tracked."
+          }
+        ]
+      }
+    ]
+  },
+  "spacing": {
+    "tokens": [
+      {
+        "name": "space-1",
+        "value": "4px",
+        "usage": "Base unit. Gap between a numeral and its unit."
+      },
+      {
+        "name": "space-2",
+        "value": "8px",
+        "usage": "Label to value."
+      },
+      {
+        "name": "space-3",
+        "value": "12px",
+        "usage": "Row padding, tight."
+      },
+      {
+        "name": "space-4",
+        "value": "16px",
+        "usage": "Row padding, default; mobile side gutter."
+      },
+      {
+        "name": "space-6",
+        "value": "24px",
+        "usage": "Between blocks."
+      },
+      {
+        "name": "space-8",
+        "value": "32px",
+        "usage": "Between blocks, roomy."
+      },
+      {
+        "name": "space-12",
+        "value": "48px",
+        "usage": "Between sections."
+      },
+      {
+        "name": "space-16",
+        "value": "64px",
+        "usage": "Between sections, roomy."
+      }
+    ]
+  },
+  "radius": {
+    "tokens": [
+      {
+        "name": "radius-none",
+        "value": "0px",
+        "usage": "Panels, rows, cells, charts."
+      },
+      {
+        "name": "radius-sm",
+        "value": "2px",
+        "usage": "Small controls."
+      },
+      {
+        "name": "radius-md",
+        "value": "7px",
+        "usage": "Desktop controls: segmented controls, steppers, secondary buttons."
+      },
+      {
+        "name": "radius-round",
+        "value": "999px",
+        "usage": "Pills, dots and ring buttons."
+      }
+    ]
+  }
+}
