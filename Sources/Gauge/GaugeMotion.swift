@@ -32,7 +32,7 @@ struct GaugeLiveDot: View {
     }
 
     private var dot: some View {
-        Circle().fill(GaugeTokens.accent.color).frame(width: 4, height: 4).accessibilityHidden(true)
+        Circle().fill(ScratchTokens.gaugeAccent.color).frame(width: 4, height: 4).accessibilityHidden(true)
     }
 }
 

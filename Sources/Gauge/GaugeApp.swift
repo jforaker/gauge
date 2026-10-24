@@ -124,7 +124,7 @@ struct GaugePanel: View {
             HStack(alignment: .firstTextBaseline) {
                 Text("GAUGE").font(ScratchType.mark.font).tracking(ScratchType.mark.tracking)
                     .overlay(alignment: .trailing) {
-                        Circle().fill(GaugeTokens.accent.color).frame(width: 4, height: 4)
+                        Circle().fill(ScratchTokens.gaugeAccent.color).frame(width: 4, height: 4)
                             .offset(x: 8).accessibilityHidden(true)
                     }
                 Spacer()
@@ -146,7 +146,7 @@ struct GaugePanel: View {
             HStack {
                 GaugeLiveDot()
                 Text(store.refreshing ? "READING PROVIDERS" : "REFRESHES EVERY 5 MIN")
-                    .font(.custom("IBMPlexMono-Regular", size: 10)).tracking(1.6).foregroundStyle(ScratchTokens.label.color)
+                    .font(.custom(ScratchFonts.mono[400]!, size: 10)).tracking(1.6).foregroundStyle(ScratchTokens.label.color)
                 Spacer()
                 Button {
                     Task { await store.refresh() }
@@ -181,7 +181,7 @@ struct GaugePanel: View {
                 Spacer()
                 if let snapshot = store.snapshots[provider], !snapshot.windows.isEmpty {
                     Text("READ \(snapshot.checkedAt, style: .time)")
-                        .font(.custom("IBMPlexMono-Regular", size: 10)).tracking(1).foregroundStyle(ScratchTokens.label.color)
+                        .font(.custom(ScratchFonts.mono[400]!, size: 10)).tracking(1).foregroundStyle(ScratchTokens.label.color)
                 }
             }
             if let snapshot = store.snapshots[provider] {
@@ -226,7 +226,7 @@ struct GaugePanel: View {
                          width: GaugePanelLayout.columnWidth(scale: displayScale))
             .animation(.easeOut(duration: reduceMotion ? 0 : GaugeMotion.transitionDuration), value: window.remainingPercent)
             if let reset = window.resetsAt {
-                Text(resetLabel(reset, now: now)).font(.custom("IBMPlexMono-Regular", size: 10)).tracking(1.6).foregroundStyle(ScratchTokens.label.color)
+                Text(resetLabel(reset, now: now)).font(.custom(ScratchFonts.mono[400]!, size: 10)).tracking(1.6).foregroundStyle(ScratchTokens.label.color)
             }
         }
         .accessibilityElement(children: .combine)

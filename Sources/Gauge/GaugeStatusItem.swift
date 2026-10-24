@@ -63,7 +63,7 @@ final class GaugeStatusController: NSObject {
         popover.animates = false
 
         subscription = store.$snapshots.sink { [weak self] snapshots in
-            let verdict = GaugeVerdict.combinedWeekly(in: Array(snapshots.values))
+            let verdict = GaugeVerdict.lowest(in: Array(snapshots.values))
             self?.dot.token = verdict.map(GaugeTokens.color)
             self?.dot.isHidden = verdict == nil
         }

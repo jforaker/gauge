@@ -3,7 +3,7 @@ import Foundation
 public enum GaugeVerdict: Equatable {
     case good, fair, poor
 
-    // Poor below 20%; fair from 20% through 50%; good above 50%.
+    // Matches quotaThresholds in scratch-studios-design: poor below 20%, fair through 50%, good above 50%.
     public static let thresholds = (poorBelow: 20.0, goodAbove: 50.0)
 
     public init(remainingPercent: Double) {
