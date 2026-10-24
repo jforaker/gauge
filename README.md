@@ -42,7 +42,15 @@ The app is distributed locally with ad-hoc signing. Developer ID signing, notari
 
 ## Design
 
-Uses Scratch Studios v3 tokens, vendored from `scratch-studios-design/exports/swift/ScratchTokens.swift`, and the source token JSON. Barlow, IBM Plex Mono, and Cutive Mono are bundled with their SIL Open Font Licenses. Paper and Night follow the system appearance. Local `GaugeTokens` define Slate (Paper #4A5866, Night #9AAFC6) until SS-04 moves into the shared design system. Filled ticks use Slate above 50% remaining, Ochre from 20–50%, and Clay below 20%; unfilled ticks use Sand. Numerals stay in ink. The menu-bar glyph uses native template rendering (white on a dark menu bar); a separate dot beside it reflects the average weekly percentage remaining across available providers: Slate above 50%, Ochre from 20–50%, and Clay below 20%. Session quotas are excluded; the dot is hidden when no weekly reading is available. The wordmark status dot stays Slate; only the Slate live dot pulses, with a 2.4-second cycle, and it is static under Reduce Motion. Reading updates count over 160 ms, ease-out, or update immediately under Reduce Motion.
+Uses the generated Swift export from `jforaker/scratch-studios-design` at tag `v1.6.1` (commit `012fa7ae7c05ab04778bed9d2d7da50c9da86412`). Before building a fresh checkout, prepare the sibling repository:
+
+```sh
+git clone --branch v1.6.1 https://github.com/jforaker/scratch-studios-design.git ../scratch-studios-design
+```
+
+`Sources/Gauge/ScratchTokens.swift` is a relative symlink to `../scratch-studios-design/exports/swift/ScratchTokens.swift`; never edit it in Gauge. The design repo has no `Package.swift`. Barlow, IBM Plex Mono, and Cutive Mono are bundled with their SIL Open Font Licenses. Paper and Night follow the system appearance. Colors use shared tokens, including `gaugeAccent`, `ochre`, `clay`, and `sand`. Verdict cutoffs match the design repo's `quotaThresholds`: above 50% remaining is good, 20–50% fair, below 20% poor. The template menu-bar glyph has a separate live dot reflecting the lowest reading across providers and windows. The wordmark dot stays in the Gauge accent. Existing motion and Reduce Motion behavior are unchanged.
+
+The app icon is built with `iconutil` from the ten full-bleed PNGs in `Sources/Gauge/Resources/Icons/gauge.iconset`, sourced unchanged from the same design release. The menu-bar PNGs are from that release's `icons/gauge/menubar`.
 
 Render the actual SwiftUI panel in both appearances using live readings:
 
