@@ -13,6 +13,14 @@ public enum GaugeVerdict: Equatable {
     public static func lowest(in snapshots: [UsageSnapshot]) -> GaugeVerdict? {
         snapshots.flatMap(\.windows).map { 100 - $0.usedPercent }.min().map { GaugeVerdict(remainingPercent: $0) }
     }
+
+    public static func combinedWeekly(in snapshots: [UsageSnapshot]) -> GaugeVerdict? {
+        let remaining = snapshots.compactMap { snapshot in
+            snapshot.windows.first { $0.label == "Weekly" }.map { 100 - $0.usedPercent }
+        }
+        guard !remaining.isEmpty else { return nil }
+        return GaugeVerdict(remainingPercent: remaining.reduce(0, +) / Double(remaining.count))
+    }
 }
 
 public enum GaugeMotion {

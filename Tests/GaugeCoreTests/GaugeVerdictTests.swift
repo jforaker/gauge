@@ -27,4 +27,18 @@ final class GaugeVerdictTests: XCTestCase {
             XCTAssertEqual(GaugeMotion.liveOpacity(elapsed: elapsed, reduceMotion: true), 1)
         }
     }
+
+    func testCombinedWeeklyIgnoresSessionAndMissingQuotas() {
+        func snapshot(_ provider: Provider, weekly: Double) -> UsageSnapshot {
+            UsageSnapshot(provider: provider, windows: [
+                UsageWindow(id: "session", label: "Session", usedPercent: 100, resetsAt: nil),
+                UsageWindow(id: "weekly", label: "Weekly", usedPercent: 100 - weekly, resetsAt: nil)
+            ])
+        }
+        XCTAssertEqual(GaugeVerdict.combinedWeekly(in: [snapshot(.codex, weekly: 95), snapshot(.claude, weekly: 61)]), .good)
+        XCTAssertEqual(GaugeVerdict.combinedWeekly(in: [snapshot(.codex, weekly: 60), snapshot(.claude, weekly: 20)]), .fair)
+        XCTAssertEqual(GaugeVerdict.combinedWeekly(in: [snapshot(.codex, weekly: 20), snapshot(.claude, weekly: 10)]), .poor)
+        XCTAssertEqual(GaugeVerdict.combinedWeekly(in: [snapshot(.codex, weekly: 40), UsageSnapshot(provider: .claude)]), .fair)
+        XCTAssertNil(GaugeVerdict.combinedWeekly(in: [UsageSnapshot(provider: .codex)]))
+    }
 }
