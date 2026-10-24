@@ -5,7 +5,7 @@ import CoreText
 
 @main
 struct GaugeApp: App {
-    @StateObject private var store = UsageStore()
+    @NSApplicationDelegateAdaptor(GaugeAppDelegate.self) private var delegate
 
     init() {
         let appResources = Bundle.main.resourceURL.flatMap { Bundle(url: $0.appendingPathComponent("Gauge_Gauge.bundle")) }
@@ -19,14 +19,9 @@ struct GaugeApp: App {
     }
 
     var body: some Scene {
-        MenuBarExtra {
-            GaugePanel(store: store)
-        } label: {
-            Image(systemName: "gauge.with.dots.needle.33percent")
-                .accessibilityLabel("Gauge — AI usage")
-        }
-        .menuBarExtraStyle(.window)
+        Settings { EmptyView() }
     }
+
 }
 
 @MainActor
@@ -35,8 +30,27 @@ final class UsageStore: ObservableObject {
     @Published var failures: [Provider: String] = [:]
     @Published var refreshing = false
     private var timer: Timer?
+    private(set) var fixtureDate: Date?
+
+    var verdict: GaugeVerdict? { GaugeVerdict.lowest(in: Array(snapshots.values)) }
 
     init() {
+        if let index = CommandLine.arguments.firstIndex(of: "--fixture"),
+           CommandLine.arguments.indices.contains(index + 1), let remaining = Double(CommandLine.arguments[index + 1]),
+           (0...100).contains(remaining) {
+            let now = Date(timeIntervalSince1970: 1792828800)
+            fixtureDate = now
+            for provider in Provider.allCases {
+                snapshots[provider] = UsageSnapshot(provider: provider, windows: [
+                    UsageWindow(id: "session", label: "Session", usedPercent: 100 - remaining, resetsAt: now.addingTimeInterval(4 * 3600)),
+                    UsageWindow(id: "weekly", label: "Weekly", usedPercent: 100 - remaining, resetsAt: now.addingTimeInterval(4 * 86400))
+                ], checkedAt: now)
+            }
+            if CommandLine.arguments.contains("--render-preview") {
+                Task { renderPreviews(); NSApplication.shared.terminate(nil) }
+            }
+            return
+        }
         if CommandLine.arguments.contains("--diagnose") || CommandLine.arguments.contains("--render-preview") {
             Task {
                 for provider in Provider.allCases {
@@ -45,16 +59,7 @@ final class UsageStore: ObservableObject {
                     print("\(provider.rawValue): \(snapshot.message ?? snapshot.windows.map { "\($0.label) \($0.remainingPercent)% left" }.joined(separator: ", "))")
                 }
                 if CommandLine.arguments.contains("--render-preview") {
-                    for scheme in [ColorScheme.light, .dark] {
-                        let renderer = ImageRenderer(content: GaugePanel(store: self).environment(\.colorScheme, scheme))
-                        renderer.scale = 2
-                        if let image = renderer.nsImage, let tiff = image.tiffRepresentation,
-                           let bitmap = NSBitmapImageRep(data: tiff), let png = bitmap.representation(using: .png, properties: [:]) {
-                            let path = FileManager.default.currentDirectoryPath + "/.build/gauge-\(scheme == .dark ? "night" : "paper").png"
-                            try? png.write(to: URL(fileURLWithPath: path))
-                            print("Rendered \(path)")
-                        }
-                    }
+                    renderPreviews()
                 }
                 NSApplication.shared.terminate(nil)
             }
@@ -65,6 +70,26 @@ final class UsageStore: ObservableObject {
             }
             NSWorkspace.shared.notificationCenter.addObserver(forName: NSWorkspace.didWakeNotification, object: nil, queue: .main) { [weak self] _ in
                 Task { await self?.refresh() }
+            }
+        }
+    }
+
+    private func renderPreviews() {
+        let fixture = CommandLine.arguments.contains("--fixture")
+        let reduceMotion = CommandLine.arguments.contains("--reduce-motion")
+        let suffix = fixture ? "-\(String(describing: verdict!))\(reduceMotion ? "-reduce-motion" : "")" : ""
+        let directory = FileManager.default.currentDirectoryPath + (fixture ? "/docs/screenshots" : "/.build")
+        try? FileManager.default.createDirectory(atPath: directory, withIntermediateDirectories: true)
+        for scheme in [ColorScheme.light, .dark] {
+            let renderer = ImageRenderer(content: GaugePanel(store: self)
+                .environment(\.colorScheme, scheme)
+                .environment(\.gaugeReduceMotionOverride, reduceMotion))
+            renderer.scale = 2
+            if let image = renderer.nsImage, let tiff = image.tiffRepresentation,
+               let bitmap = NSBitmapImageRep(data: tiff), let png = bitmap.representation(using: .png, properties: [:]) {
+                let path = directory + "/gauge-\(scheme == .dark ? "night" : "paper")\(suffix).png"
+                try? png.write(to: URL(fileURLWithPath: path))
+                print("Rendered \(path)")
             }
         }
     }
@@ -90,11 +115,18 @@ final class UsageStore: ObservableObject {
 struct GaugePanel: View {
     @ObservedObject var store: UsageStore
     @Environment(\.displayScale) private var displayScale
+    @Environment(\.accessibilityReduceMotion) private var systemReduceMotion
+    @Environment(\.gaugeReduceMotionOverride) private var forcedReduceMotion
+    private var reduceMotion: Bool { systemReduceMotion || forcedReduceMotion }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .firstTextBaseline) {
                 Text("GAUGE").font(ScratchType.mark.font).tracking(ScratchType.mark.tracking)
+                    .overlay(alignment: .trailing) {
+                        Circle().fill(GaugeTokens.accent.color).frame(width: 4, height: 4)
+                            .offset(x: 8).accessibilityHidden(true)
+                    }
                 Spacer()
                 Text("SS–04").font(ScratchType.label.font).tracking(1.76).foregroundStyle(ScratchTokens.label.color)
             }
@@ -105,14 +137,14 @@ struct GaugePanel: View {
             TimelineView(.periodic(from: .now, by: 30)) { context in
                 VStack(spacing: 0) {
                     ForEach(Provider.allCases) { provider in
-                        providerSection(provider, now: context.date)
+                        providerSection(provider, now: store.fixtureDate ?? context.date)
                         rule
                     }
                 }
             }
 
             HStack {
-                Circle().fill(ScratchTokens.ink.color).frame(width: 4, height: 4)
+                GaugeLiveDot()
                 Text(store.refreshing ? "READING PROVIDERS" : "REFRESHES EVERY 5 MIN")
                     .font(.custom("IBMPlexMono-Regular", size: 10)).tracking(1.6).foregroundStyle(ScratchTokens.label.color)
                 Spacer()
@@ -134,8 +166,8 @@ struct GaugePanel: View {
             .padding(.top, 16)
         }
         .buttonStyle(.plain)
-        .padding(24)
-        .frame(width: 400)
+        .padding(GaugePanelLayout.inset)
+        .frame(width: GaugePanelLayout.width)
         .foregroundStyle(ScratchTokens.ink.color)
         .background(ScratchTokens.ground.color)
     }
@@ -153,9 +185,10 @@ struct GaugePanel: View {
                 }
             }
             if let snapshot = store.snapshots[provider] {
-                HStack(alignment: .top, spacing: 24) {
+                HStack(alignment: .top, spacing: GaugePanelLayout.columnGap) {
                     ForEach(snapshot.windows) { window in
-                        windowRow(window, now: now).frame(maxWidth: .infinity, alignment: .leading)
+                        windowRow(window, now: now)
+                            .frame(width: GaugePanelLayout.columnWidth(scale: displayScale), alignment: .leading)
                     }
                 }
                 if let message = store.failures[provider] ?? snapshot.message {
@@ -184,17 +217,14 @@ struct GaugePanel: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(window.label.uppercased()).font(ScratchType.label.font).tracking(1.76).foregroundStyle(ScratchTokens.label.color)
             HStack(alignment: .firstTextBaseline) {
-                Text("\(window.remainingPercent)").font(ScratchType.numeralMono.font).tracking(-1.12)
+                CountingReading(value: Double(window.remainingPercent))
+                    .animation(.easeOut(duration: reduceMotion ? 0 : GaugeMotion.transitionDuration), value: window.remainingPercent)
                 Text("% LEFT").font(ScratchType.label.font).tracking(1.76).foregroundStyle(ScratchTokens.inkSoft.color)
             }
-            HStack(spacing: 4) {
-                ForEach(0..<25, id: \.self) { tick in
-                    Rectangle()
-                        .fill(Double(tick) / 25 < 1 - window.usedPercent / 100 ? readingColor(window) : ScratchTokens.sand.color)
-                        .frame(height: 8)
-                }
-            }
-            .accessibilityHidden(true)
+            GaugeTickBar(remainingFraction: 1 - window.usedPercent / 100,
+                         filledColor: readingColor(window),
+                         width: GaugePanelLayout.columnWidth(scale: displayScale))
+            .animation(.easeOut(duration: reduceMotion ? 0 : GaugeMotion.transitionDuration), value: window.remainingPercent)
             if let reset = window.resetsAt {
                 Text(resetLabel(reset, now: now)).font(.custom("IBMPlexMono-Regular", size: 10)).tracking(1.6).foregroundStyle(ScratchTokens.label.color)
             }
@@ -203,7 +233,7 @@ struct GaugePanel: View {
     }
 
     private func readingColor(_ window: UsageWindow) -> Color {
-        window.remainingPercent <= 10 ? ScratchTokens.clay.color : window.remainingPercent <= 25 ? ScratchTokens.ochre.color : ScratchTokens.nominal.color
+        GaugeTokens.color(for: GaugeVerdict(remainingPercent: 100 - window.usedPercent)).color
     }
 
     private func resetLabel(_ date: Date, now: Date) -> String {

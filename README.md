@@ -42,7 +42,7 @@ The app is distributed locally with ad-hoc signing. Developer ID signing, notari
 
 ## Design
 
-Uses Scratch Studios v3 tokens, vendored from `scratch-studios-design/exports/swift/ScratchTokens.swift`, and the source token JSON. Barlow, IBM Plex Mono, and Cutive Mono are bundled with their SIL Open Font Licenses. Paper and Night follow the system appearance. Progress ticks use Kelp (`nominal`) above 25% remaining, Ochre at 25% or less, and Clay at 10% or less. Unfilled ticks use Sand. Numerals and status remain neutral ink.
+Uses Scratch Studios v3 tokens, vendored from `scratch-studios-design/exports/swift/ScratchTokens.swift`, and the source token JSON. Barlow, IBM Plex Mono, and Cutive Mono are bundled with their SIL Open Font Licenses. Paper and Night follow the system appearance. Local `GaugeTokens` define Slate (Paper #4A5866, Night #9AAFC6) until SS-04 moves into the shared design system. Filled ticks use Slate above 50% remaining, Ochre from 20–50%, and Clay below 20%; unfilled ticks use Sand. Numerals stay in ink. The menu-bar glyph uses native template rendering (white on a dark menu bar); a separate dot beside it reflects the lowest quota's verdict. The wordmark status dot stays Slate; only the Slate live dot pulses, with a 2.4-second cycle, and it is static under Reduce Motion. Reading updates count over 160 ms, ease-out, or update immediately under Reduce Motion.
 
 Render the actual SwiftUI panel in both appearances using live readings:
 
@@ -51,3 +51,5 @@ swift run Gauge --render-preview
 ```
 
 Images are written to `.build/gauge-paper.png` and `.build/gauge-night.png`.
+
+For deterministic verification without provider requests, use `--fixture 87`, `--fixture 40`, or `--fixture 10`. Add `--reduce-motion` to opt in to reduced motion without changing the macOS setting. Combine these with `--render-preview` to write Paper/Night captures of the actual SwiftUI popover to `docs/screenshots/`. Without `--render-preview`, fixtures run in the menu bar until quit. The override can only enable reduced motion; it cannot disable the system accessibility preference.
