@@ -50,7 +50,7 @@ git clone --branch v1.6.1 https://github.com/jforaker/scratch-studios-design.git
 
 `Sources/Gauge/ScratchTokens.swift` is a relative symlink to `../scratch-studios-design/exports/swift/ScratchTokens.swift`; never edit it in Gauge. The design repo has no `Package.swift`. Barlow, IBM Plex Mono, and Cutive Mono are bundled with their SIL Open Font Licenses. Paper and Night follow the system appearance. Colors use shared tokens, including `gaugeAccent`, `ochre`, `clay`, and `sand`. Verdict cutoffs match the design repo's `quotaThresholds`: above 50% remaining is good, 20–50% fair, below 20% poor. The template menu-bar glyph has a separate live dot reflecting the lowest reading across providers and windows. The wordmark dot stays in the Gauge accent. Existing motion and Reduce Motion behavior are unchanged.
 
-The app icon is built with `iconutil` from the ten full-bleed PNGs in `Sources/Gauge/Resources/Icons/gauge.iconset`, sourced unchanged from the same design release. The menu-bar PNGs are from that release's `icons/gauge/menubar`.
+The app icon is built with `iconutil` from the ten full-bleed PNGs in `Sources/Gauge/Resources/Icons/gauge.iconset`, sourced unchanged from the same design release. The menu-bar glyph is a local, simplified variant: five widely spaced ticks between two rules, with the dynamic verdict dot beside it. Its vector source is `docs/icons/gauge-menubar.svg`; regenerate its 22pt 1x/2x template PNGs with `swift scripts/render-menubar-icon.swift`. The original shared glyph is retained in `docs/icons/menubar-original-22.png` and `menubar-original-22@2x.png` for comparison.
 
 Render the actual SwiftUI panel in both appearances using live readings:
 
