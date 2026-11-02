@@ -4,6 +4,13 @@
 
 A quiet read on what remains. Native macOS menu bar readings for Codex and Claude subscription usage.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/architecture-night.svg">
+  <img alt="Architecture of Gauge. The menu bar status item opens a popover of session and weekly readings. An in-memory store refreshes from the Codex and Claude CLIs." src="docs/architecture-paper.svg">
+</picture>
+
+The status item, the popover, and the two CLIs it reads.
+
 ## Run
 
 Requires macOS 14 or later and Swift 5.9 or later (Xcode Command Line Tools).
