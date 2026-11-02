@@ -12,17 +12,6 @@ let rectangles: [CGRect] = [
 }
 
 let root = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
-let source = root.appendingPathComponent("docs/icons/gauge-menubar.svg")
-let paths = rectangles.map {
-    "  <rect x=\"\(Int($0.minX))\" y=\"\(Int($0.minY))\" width=\"\(Int($0.width))\" height=\"\(Int($0.height))\"/>"
-}.joined(separator: "\n")
-let svg = """
-<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="black">
-\(paths)
-</svg>
-
-"""
-try svg.write(to: source, atomically: true, encoding: .utf8)
 
 for scale in [1, 2] {
     let pixels = 22 * scale
