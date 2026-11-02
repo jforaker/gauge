@@ -23,7 +23,7 @@ struct GaugeLiveDot: View {
         if reduceMotion {
             dot
         } else {
-            TimelineView(.animation(minimumInterval: 1 / 30)) { context in
+            TimelineView(.periodic(from: .now, by: 30)) { context in
                 dot
                     // The live dot is the sole exception to the no-accent-opacity rule.
                     .opacity(GaugeMotion.liveOpacity(elapsed: context.date.timeIntervalSince(startedAt), reduceMotion: false))
