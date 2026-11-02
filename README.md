@@ -4,12 +4,11 @@
 
 A quiet read on what remains. Native macOS menu bar readings for Codex and Claude subscription usage.
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/architecture-night.svg">
-  <img alt="Architecture of Gauge. The menu bar status item opens a popover of session and weekly readings. An in-memory store refreshes from the Codex and Claude CLIs." src="docs/architecture-paper.svg">
-</picture>
+## Preview
 
-The status item, the popover, and the two CLIs it reads.
+| Paper | Night |
+| --- | --- |
+| ![Gauge in Paper appearance](docs/screenshots/gauge-paper-good.png) | ![Gauge in Night appearance](docs/screenshots/gauge-night-good.png) |
 
 ## Run
 
@@ -26,13 +25,20 @@ bash scripts/build-app.sh
 open dist/Gauge.app
 ```
 
-## Provider login
+## Connect providers
 
-Install the provider CLIs and sign in normally with `codex login` and `claude auth login`. Gauge launches those CLIs as your macOS user and reuses their existing authentication. It does not collect, copy, or store credentials. Finder launches discover the executable PATH through your login shell, with common install locations as fallbacks.
+Install the Codex and Claude CLIs, then sign in to each one:
 
-Custom `CODEX_HOME` and `CLAUDE_CONFIG_DIR` values are honored when present in Gauge's launch environment. Shell discovery imports PATH only; custom account variables set solely in shell startup files are not imported.
+```sh
+codex login
+claude auth login
+```
 
-Codex is queried through its app-server JSON-RPC protocol (`account/rateLimits/read`). Claude is queried through its stream-JSON control protocol (`initialize`, then `get_usage` with `skip_behaviors`). No user prompt is submitted. Claude hooks are disabled, no tools are enabled, and the probe does not persist a conversation. These provider interfaces are experimental and may change with CLI updates.
+Gauge runs those CLIs as your macOS user and reuses their existing sessions. It never collects, copies, or stores your credentials. When launched from Finder, it reads your login-shell `PATH` and also checks common install locations.
+
+Gauge respects `CODEX_HOME` and `CLAUDE_CONFIG_DIR` when they are in its launch environment. Finder does not inherit custom account variables defined only in your shell startup files.
+
+For each read, Gauge requests Codex rate limits through its app-server interface and Claude usage through its control interface. It sends no user prompt; Claude hooks and tools are disabled. These CLI interfaces are experimental and may change as the providers update their tools.
 
 Readings refresh on startup, every five minutes, after wake, and on manual refresh. If a refresh fails, the previous reading stays visible with a failure notice and its original timestamp. Countdown expiry does not fabricate a refreshed quota. API-key accounts may not report subscription limits.
 
