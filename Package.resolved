@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "small-currents-design",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jforaker/small-currents-design.git",
+      "state" : {
+        "revision" : "128ffaa5c44204fc9f4677f775a6dc6f9f827691",
+        "version" : "1.7.2"
+      }
+    }
+  ],
+  "version" : 2
+}
