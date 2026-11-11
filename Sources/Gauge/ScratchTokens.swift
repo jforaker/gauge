@@ -1,1 +1,1 @@
-../../../scratch-studios-design/exports/swift/ScratchTokens.swift
+../../../small-currents-design/exports/swift/ScratchTokens.swift
