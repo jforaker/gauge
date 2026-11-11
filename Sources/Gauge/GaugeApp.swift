@@ -1,3 +1,4 @@
+import SmallCurrentsDesign
 import AppKit
 import SwiftUI
 import GaugeCore

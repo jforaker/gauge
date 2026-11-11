@@ -1,1 +1,0 @@
-../../../small-currents-design/exports/swift/ScratchTokens.swift
