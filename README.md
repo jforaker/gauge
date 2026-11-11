@@ -64,13 +64,13 @@ The app is distributed locally with ad-hoc signing. Developer ID signing, notari
 
 ## Design
 
-Uses the generated Swift export from `jforaker/scratch-studios-design` at tag `v1.6.1` (commit `012fa7ae7c05ab04778bed9d2d7da50c9da86412`). Before building a fresh checkout, prepare the sibling repository:
+Uses the generated Swift export from `jforaker/small-currents-design` at tag `v1.7.1` (commit `4722c5258d93fffcfd712c679eda734e12bd383b`). Before building a fresh checkout, prepare the sibling repository:
 
 ```sh
-git clone --branch v1.6.1 https://github.com/jforaker/scratch-studios-design.git ../scratch-studios-design
+git clone --branch v1.7.1 https://github.com/jforaker/small-currents-design.git ../small-currents-design
 ```
 
-`Sources/Gauge/ScratchTokens.swift` is a relative symlink to `../scratch-studios-design/exports/swift/ScratchTokens.swift`; never edit it in Gauge. The design repo has no `Package.swift`. Barlow, IBM Plex Mono, and Cutive Mono are bundled with their SIL Open Font Licenses. Paper and Night follow the system appearance. Colors use shared tokens, including `gaugeAccent`, `ochre`, `clay`, and `sand`. Verdict cutoffs match the design repo's `quotaThresholds`: above 50% remaining is good, 20–50% fair, below 20% poor. The template menu-bar glyph has a separate live dot reflecting the lowest reading across providers and windows. The wordmark dot stays in the Gauge accent. Existing motion and Reduce Motion behavior are unchanged.
+`Sources/Gauge/ScratchTokens.swift` is a relative symlink to `../small-currents-design/exports/swift/ScratchTokens.swift`; never edit it in Gauge. The design repo has no `Package.swift`. Barlow, IBM Plex Mono, and Cutive Mono are bundled with their SIL Open Font Licenses. Paper and Night follow the system appearance. Colors use shared tokens, including `gaugeAccent`, `ochre`, `clay`, and `sand`. Verdict cutoffs match the design repo's `quotaThresholds`: above 50% remaining is good, 20–50% fair, below 20% poor. The template menu-bar glyph has a separate live dot reflecting the lowest reading across providers and windows. The wordmark dot stays in the Gauge accent. Existing motion and Reduce Motion behavior are unchanged.
 
 The standalone app icon is built with `iconutil` from the PNGs in `Sources/Gauge/Resources/Icons/gauge.iconset`. Regenerate the menu-bar template images with `swift scripts/render-menubar-icon.swift`.
 
